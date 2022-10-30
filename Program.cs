@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using SMS.Data;
+using SMS.Enum;
+using SMS.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,11 +14,39 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+//builder.Services.AddDefaultIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
+//    .AddEntityFrameworkStores<ApplicationDbContext>()
+//.AddRoles<IdentityRole>();
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultUI()
+.AddDefaultTokenProviders();
+
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddRazorPages();
+
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    try
+    {
+        var services = scope.ServiceProvider;
+        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+        await Seed.SeedRolesAsync(userManager, roleManager);
+    }
+    catch (Exception ex)
+    {
+        LoggerFactory loggerFactory = new LoggerFactory();
+        var logger = loggerFactory.CreateLogger<Program>();
+        logger.LogError(ex, "Error Seeding DB.");
+        throw;
+    }
+    
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
