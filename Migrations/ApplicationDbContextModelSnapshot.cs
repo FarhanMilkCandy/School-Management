@@ -228,6 +228,107 @@ namespace SMS.Migrations
                     b.ToTable("ApplicationUser", (string)null);
                 });
 
+            modelBuilder.Entity("SMS.Models.Course", b =>
+                {
+                    b.Property<int>("CourseId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("CourseDescription")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("CourseName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("CourseType")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("IsOffered")
+                        .HasColumnType("tinyint(1)");
+
+                    b.HasKey("CourseId");
+
+                    b.ToTable("Course", (string)null);
+                });
+
+            modelBuilder.Entity("SMS.Models.Enrollment", b =>
+                {
+                    b.Property<int>("EnrollmentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EnrollmentName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("Grade")
+                        .HasColumnType("int");
+
+                    b.HasKey("EnrollmentId");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("Enrollment", (string)null);
+                });
+
+            modelBuilder.Entity("SMS.Models.Fees", b =>
+                {
+                    b.Property<int>("FeeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<double>("FeeAmount")
+                        .HasColumnType("double");
+
+                    b.Property<string>("FeeDescription")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("FeeId");
+
+                    b.ToTable("Fees", (string)null);
+                });
+
+            modelBuilder.Entity("SMS.Models.Payment", b =>
+                {
+                    b.Property<int>("PaymentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("EnrollmentsEnrollmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FeesFeeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateOnly>("PaymentDate")
+                        .HasColumnType("date");
+
+                    b.HasKey("PaymentId");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("EnrollmentsEnrollmentId");
+
+                    b.HasIndex("FeesFeeId");
+
+                    b.ToTable("Payment", (string)null);
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -277,6 +378,72 @@ namespace SMS.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("SMS.Models.Enrollment", b =>
+                {
+                    b.HasOne("SMS.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("Enrollments")
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SMS.Models.Course", "Course")
+                        .WithMany("Enrollments")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("SMS.Models.Payment", b =>
+                {
+                    b.HasOne("SMS.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SMS.Models.Enrollment", "Enrollments")
+                        .WithMany("Payments")
+                        .HasForeignKey("EnrollmentsEnrollmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SMS.Models.Fees", "Fees")
+                        .WithMany("Payments")
+                        .HasForeignKey("FeesFeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Enrollments");
+
+                    b.Navigation("Fees");
+                });
+
+            modelBuilder.Entity("SMS.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Enrollments");
+                });
+
+            modelBuilder.Entity("SMS.Models.Course", b =>
+                {
+                    b.Navigation("Enrollments");
+                });
+
+            modelBuilder.Entity("SMS.Models.Enrollment", b =>
+                {
+                    b.Navigation("Payments");
+                });
+
+            modelBuilder.Entity("SMS.Models.Fees", b =>
+                {
+                    b.Navigation("Payments");
                 });
 #pragma warning restore 612, 618
         }
