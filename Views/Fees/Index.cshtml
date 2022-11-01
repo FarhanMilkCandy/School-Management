@@ -1,0 +1,41 @@
+﻿@model IEnumerable<SMS.Models.Fees>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FeeAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FeeDescription)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FeeAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FeeDescription)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.FeeId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.FeeId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.FeeId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

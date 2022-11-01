@@ -8,6 +8,7 @@ namespace SMS.Enum
         public static async Task SeedRolesAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             await roleManager.CreateAsync(new IdentityRole(Enums.Roles.Admin.ToString()));
+            await roleManager.CreateAsync(new IdentityRole(Enums.Roles.User.ToString()));
             await roleManager.CreateAsync(new IdentityRole(Enums.Roles.Student.ToString()));
         }
     }
