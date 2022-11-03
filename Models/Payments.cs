@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SMS.Models
 {
@@ -13,8 +14,21 @@ namespace SMS.Models
         [DisplayName("Payment Date")]
         public DateOnly PaymentDate { get; set; }
 
-        public virtual Fees Fees { get; set; }
-        public virtual Enrollment Enrollments { get; set; }
-        public virtual ApplicationUser ApplicationUser { get; set; }
+        [Required]
+        public int EnrollmentsId { get; set; }
+
+        public Enrollment? Enrollments { get; set; }
+
+        [Required]
+        public int FeesId { get; set; }
+
+        public Fees? Fees { get; set; }
+
+        [Required]
+        [DisplayName("Paid By")]
+        [ForeignKey("Id")]
+        public string PayeeId { get; set; }
+
+        public ApplicationUser? Payee { get; set; }
     }
 }

@@ -11,8 +11,8 @@ using SMS.Data;
 namespace SMS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221101094631_entities_init")]
-    partial class entities_init
+    [Migration("20221103115039_Fixes")]
+    partial class Fixes
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -261,25 +261,27 @@ namespace SMS.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<int>("CourseId")
+                    b.Property<int>("CoursesId")
                         .HasColumnType("int");
 
-                    b.Property<string>("EnrollmentName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<DateOnly>("EnrollmentDate")
+                        .HasColumnType("date");
 
                     b.Property<int?>("Grade")
                         .HasColumnType("int");
 
+                    b.Property<int>("PaymentsId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StudentId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
                     b.HasKey("EnrollmentId");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("CoursesId");
 
-                    b.HasIndex("CourseId");
+                    b.HasIndex("StudentId");
 
                     b.ToTable("Enrollment", (string)null);
                 });
@@ -290,6 +292,9 @@ namespace SMS.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("CoursesId")
+                        .HasColumnType("int");
+
                     b.Property<double>("FeeAmount")
                         .HasColumnType("double");
 
@@ -297,6 +302,9 @@ namespace SMS.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("FeeId");
+
+                    b.HasIndex("CoursesId")
+                        .IsUnique();
 
                     b.ToTable("Fees", (string)null);
                 });
@@ -307,26 +315,26 @@ namespace SMS.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("ApplicationUserId")
+                    b.Property<int>("EnrollmentsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FeesId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PayeeId")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
-
-                    b.Property<int>("EnrollmentsEnrollmentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FeesFeeId")
-                        .HasColumnType("int");
 
                     b.Property<DateOnly>("PaymentDate")
                         .HasColumnType("date");
 
                     b.HasKey("PaymentId");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("EnrollmentsId");
 
-                    b.HasIndex("EnrollmentsEnrollmentId");
+                    b.HasIndex("FeesId");
 
-                    b.HasIndex("FeesFeeId");
+                    b.HasIndex("PayeeId");
 
                     b.ToTable("Payment", (string)null);
                 });
@@ -384,58 +392,73 @@ namespace SMS.Migrations
 
             modelBuilder.Entity("SMS.Models.Enrollment", b =>
                 {
-                    b.HasOne("SMS.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("SMS.Models.Course", "Courses")
                         .WithMany("Enrollments")
-                        .HasForeignKey("ApplicationUserId")
+                        .HasForeignKey("CoursesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SMS.Models.Course", "Course")
+                    b.HasOne("SMS.Models.ApplicationUser", "Student")
                         .WithMany("Enrollments")
-                        .HasForeignKey("CourseId")
+                        .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUser");
+                    b.Navigation("Courses");
 
-                    b.Navigation("Course");
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("SMS.Models.Fees", b =>
+                {
+                    b.HasOne("SMS.Models.Course", "Courses")
+                        .WithOne("Fees")
+                        .HasForeignKey("SMS.Models.Fees", "CoursesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Courses");
                 });
 
             modelBuilder.Entity("SMS.Models.Payment", b =>
                 {
-                    b.HasOne("SMS.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SMS.Models.Enrollment", "Enrollments")
                         .WithMany("Payments")
-                        .HasForeignKey("EnrollmentsEnrollmentId")
+                        .HasForeignKey("EnrollmentsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SMS.Models.Fees", "Fees")
                         .WithMany("Payments")
-                        .HasForeignKey("FeesFeeId")
+                        .HasForeignKey("FeesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUser");
+                    b.HasOne("SMS.Models.ApplicationUser", "Payee")
+                        .WithMany("Payments")
+                        .HasForeignKey("PayeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Enrollments");
 
                     b.Navigation("Fees");
+
+                    b.Navigation("Payee");
                 });
 
             modelBuilder.Entity("SMS.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Enrollments");
+
+                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("SMS.Models.Course", b =>
                 {
                     b.Navigation("Enrollments");
+
+                    b.Navigation("Fees");
                 });
 
             modelBuilder.Entity("SMS.Models.Enrollment", b =>

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SMS.Data;
 using SMS.Models;
 
@@ -22,7 +23,8 @@ namespace SMS.Controllers
         // GET: Fees
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Fees.ToListAsync());
+            var applicationDbContext = _context.Fees.Include(f => f.Courses);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Fees/Details/5
@@ -34,6 +36,7 @@ namespace SMS.Controllers
             }
 
             var fees = await _context.Fees
+                .Include(f => f.Courses)
                 .FirstOrDefaultAsync(m => m.FeeId == id);
             if (fees == null)
             {
@@ -46,6 +49,7 @@ namespace SMS.Controllers
         // GET: Fees/Create
         public IActionResult Create()
         {
+            ViewData["CoursesId"] = new SelectList(_context.Courses, "CourseId", "CourseName");
             return View();
         }
 
@@ -54,14 +58,23 @@ namespace SMS.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FeeId,FeeAmount,FeeDescription")] Fees fees)
+        public async Task<IActionResult> Create([Bind("FeeId,FeeAmount,FeeDescription,CoursesId")] Fees fees)
         {
+            //ModelState.SetModelValue( this.ModelState.Keys.Where(w=> w.ToString().Equals("Courses")).FirstOrDefault(), _context.Courses.Where(w => w.CourseId == fees.CoursesId).FirstOrDefault() ?? new Course(), "");
+            var errors = ModelState.Keys
+                   .Where(k => ModelState[k].Errors.Count > 0)
+                   .Select(k => new
+                   {
+                       propertyName = k,
+                       errorMessage = ModelState[k].Errors[0].ErrorMessage
+                   }).ToList();
             if (ModelState.IsValid)
             {
                 _context.Add(fees);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CoursesId"] = new SelectList(_context.Courses, "CourseId", "CourseName", fees.CoursesId);
             return View(fees);
         }
 
@@ -78,6 +91,7 @@ namespace SMS.Controllers
             {
                 return NotFound();
             }
+            ViewData["CoursesId"] = new SelectList(_context.Courses, "CourseId", "CourseName", fees.CoursesId);
             return View(fees);
         }
 
@@ -86,7 +100,7 @@ namespace SMS.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FeeId,FeeAmount,FeeDescription")] Fees fees)
+        public async Task<IActionResult> Edit(int id, [Bind("FeeId,FeeAmount,FeeDescription,CoursesId")] Fees fees)
         {
             if (id != fees.FeeId)
             {
@@ -113,6 +127,7 @@ namespace SMS.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CoursesId"] = new SelectList(_context.Courses, "CourseId", "CourseName", fees.CoursesId);
             return View(fees);
         }
 
@@ -125,6 +140,7 @@ namespace SMS.Controllers
             }
 
             var fees = await _context.Fees
+                .Include(f => f.Courses)
                 .FirstOrDefaultAsync(m => m.FeeId == id);
             if (fees == null)
             {

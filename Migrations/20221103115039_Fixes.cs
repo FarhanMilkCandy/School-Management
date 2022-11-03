@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SMS.Migrations
 {
-    public partial class entities_init : Migration
+    public partial class Fixes : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -93,22 +93,6 @@ namespace SMS.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Course", x => x.CourseId);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Fees",
-                columns: table => new
-                {
-                    FeeId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    FeeAmount = table.Column<double>(type: "double", nullable: false),
-                    FeeDescription = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Fees", x => x.FeeId);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -245,25 +229,48 @@ namespace SMS.Migrations
                 {
                     EnrollmentId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    EnrollmentName = table.Column<string>(type: "longtext", nullable: false)
+                    EnrollmentDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    CoursesId = table.Column<int>(type: "int", nullable: false),
+                    StudentId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Grade = table.Column<int>(type: "int", nullable: true),
-                    CourseId = table.Column<int>(type: "int", nullable: false),
-                    ApplicationUserId = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    PaymentsId = table.Column<int>(type: "int", nullable: false),
+                    Grade = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Enrollment", x => x.EnrollmentId);
                     table.ForeignKey(
-                        name: "FK_Enrollment_ApplicationUser_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
+                        name: "FK_Enrollment_ApplicationUser_StudentId",
+                        column: x => x.StudentId,
                         principalTable: "ApplicationUser",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Enrollment_Course_CourseId",
-                        column: x => x.CourseId,
+                        name: "FK_Enrollment_Course_CoursesId",
+                        column: x => x.CoursesId,
+                        principalTable: "Course",
+                        principalColumn: "CourseId",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Fees",
+                columns: table => new
+                {
+                    FeeId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    FeeAmount = table.Column<double>(type: "double", nullable: false),
+                    FeeDescription = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CoursesId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Fees", x => x.FeeId);
+                    table.ForeignKey(
+                        name: "FK_Fees_Course_CoursesId",
+                        column: x => x.CoursesId,
                         principalTable: "Course",
                         principalColumn: "CourseId",
                         onDelete: ReferentialAction.Cascade);
@@ -277,29 +284,29 @@ namespace SMS.Migrations
                     PaymentId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     PaymentDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    FeesFeeId = table.Column<int>(type: "int", nullable: false),
-                    EnrollmentsEnrollmentId = table.Column<int>(type: "int", nullable: false),
-                    ApplicationUserId = table.Column<string>(type: "varchar(255)", nullable: false)
+                    EnrollmentsId = table.Column<int>(type: "int", nullable: false),
+                    FeesId = table.Column<int>(type: "int", nullable: false),
+                    PayeeId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Payment", x => x.PaymentId);
                     table.ForeignKey(
-                        name: "FK_Payment_ApplicationUser_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
+                        name: "FK_Payment_ApplicationUser_PayeeId",
+                        column: x => x.PayeeId,
                         principalTable: "ApplicationUser",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Payment_Enrollment_EnrollmentsEnrollmentId",
-                        column: x => x.EnrollmentsEnrollmentId,
+                        name: "FK_Payment_Enrollment_EnrollmentsId",
+                        column: x => x.EnrollmentsId,
                         principalTable: "Enrollment",
                         principalColumn: "EnrollmentId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Payment_Fees_FeesFeeId",
-                        column: x => x.FeesFeeId,
+                        name: "FK_Payment_Fees_FeesId",
+                        column: x => x.FeesId,
                         principalTable: "Fees",
                         principalColumn: "FeeId",
                         onDelete: ReferentialAction.Cascade);
@@ -344,29 +351,35 @@ namespace SMS.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enrollment_ApplicationUserId",
+                name: "IX_Enrollment_CoursesId",
                 table: "Enrollment",
-                column: "ApplicationUserId");
+                column: "CoursesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enrollment_CourseId",
+                name: "IX_Enrollment_StudentId",
                 table: "Enrollment",
-                column: "CourseId");
+                column: "StudentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Payment_ApplicationUserId",
-                table: "Payment",
-                column: "ApplicationUserId");
+                name: "IX_Fees_CoursesId",
+                table: "Fees",
+                column: "CoursesId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Payment_EnrollmentsEnrollmentId",
+                name: "IX_Payment_EnrollmentsId",
                 table: "Payment",
-                column: "EnrollmentsEnrollmentId");
+                column: "EnrollmentsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Payment_FeesFeeId",
+                name: "IX_Payment_FeesId",
                 table: "Payment",
-                column: "FeesFeeId");
+                column: "FeesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payment_PayeeId",
+                table: "Payment",
+                column: "PayeeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -14,7 +14,7 @@ namespace SMS.Models
 
         [Required]
         [DisplayName("Fee Id")]
-        public string FeeId { get; set; }
+        public string FeesId { get; set; }
 
         [DisplayName("Description")]
         public string? Description { get; set; }

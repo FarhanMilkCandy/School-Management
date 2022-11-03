@@ -13,19 +13,17 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Course" class="control-label"></label>
-                @Html.DropDownList("CourseId", null, htmlAttributes: new { @class = "form-control" })
-                <span asp-validation-for="Course" class="text-danger"></span>
+                <label asp-for="EnrollmentDate" class="control-label"></label>
+                <input asp-for="EnrollmentDate" class="form-control" />
+                <span asp-validation-for="EnrollmentDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ApplicationUser" class="control-label"></label>
-                @Html.DropDownList("Id", null, htmlAttributes: new { @class = "form-control" })
-                <span asp-validation-for="ApplicationUser" class="text-danger"></span>
+                <label asp-for="CoursesId" class="control-label"></label>
+                <select asp-for="CoursesId" class ="form-control" asp-items="ViewBag.CoursesId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="EnrollmentName" class="control-label"></label>
-                <input asp-for="EnrollmentName" class="form-control" />
-                <span asp-validation-for="EnrollmentName" class="text-danger"></span>
+                <label asp-for="StudentId" class="control-label"></label>
+                <select asp-for="StudentId" class ="form-control" asp-items="ViewBag.StudentId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Grade" class="control-label"></label>

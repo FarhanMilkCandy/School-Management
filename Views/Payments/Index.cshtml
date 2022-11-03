@@ -15,6 +15,15 @@
             <th>
                 @Html.DisplayNameFor(model => model.PaymentDate)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Enrollments)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Fees)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Payee)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -23,6 +32,15 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.PaymentDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Enrollments.EnrollmentId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fees.FeeId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Payee.Id)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.PaymentId">Edit</a> |
