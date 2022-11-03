@@ -18,6 +18,18 @@
                 <span asp-validation-for="PaymentDate" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="EnrollmentsId" class="control-label"></label>
+                <select asp-for="EnrollmentsId" class ="form-control" asp-items="ViewBag.EnrollmentsId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="FeesId" class="control-label"></label>
+                <select asp-for="FeesId" class ="form-control" asp-items="ViewBag.FeesId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="PayeeId" class="control-label"></label>
+                <select asp-for="PayeeId" class ="form-control" asp-items="ViewBag.PayeeId"></select>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>

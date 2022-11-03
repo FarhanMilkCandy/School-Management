@@ -22,7 +22,8 @@ namespace SMS.Controllers
         // GET: Payments
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Payments.ToListAsync());
+            var applicationDbContext = _context.Payments.Include(p => p.Enrollments).Include(p => p.Fees).Include(p => p.Payee);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Payments/Details/5
@@ -34,6 +35,9 @@ namespace SMS.Controllers
             }
 
             var payment = await _context.Payments
+                .Include(p => p.Enrollments)
+                .Include(p => p.Fees)
+                .Include(p => p.Payee)
                 .FirstOrDefaultAsync(m => m.PaymentId == id);
             if (payment == null)
             {
@@ -46,6 +50,9 @@ namespace SMS.Controllers
         // GET: Payments/Create
         public IActionResult Create()
         {
+            ViewData["EnrollmentsId"] = new SelectList(_context.Enrollments, "EnrollmentId", "EnrollmentId");
+            ViewData["FeesId"] = new SelectList(_context.Fees, "FeeId", "FeeId");
+            ViewData["PayeeId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
             return View();
         }
 
@@ -54,7 +61,7 @@ namespace SMS.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PaymentId,PaymentDate")] Payment payment)
+        public async Task<IActionResult> Create([Bind("PaymentId,PaymentDate,EnrollmentsId,FeesId,PayeeId")] Payment payment)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +69,9 @@ namespace SMS.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["EnrollmentsId"] = new SelectList(_context.Enrollments, "EnrollmentId", "EnrollmentId", payment.EnrollmentsId);
+            ViewData["FeesId"] = new SelectList(_context.Fees, "FeeId", "FeeId", payment.FeesId);
+            ViewData["PayeeId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", payment.PayeeId);
             return View(payment);
         }
 
@@ -78,6 +88,9 @@ namespace SMS.Controllers
             {
                 return NotFound();
             }
+            ViewData["EnrollmentsId"] = new SelectList(_context.Enrollments, "EnrollmentId", "EnrollmentId", payment.EnrollmentsId);
+            ViewData["FeesId"] = new SelectList(_context.Fees, "FeeId", "FeeId", payment.FeesId);
+            ViewData["PayeeId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", payment.PayeeId);
             return View(payment);
         }
 
@@ -86,7 +99,7 @@ namespace SMS.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PaymentId,PaymentDate")] Payment payment)
+        public async Task<IActionResult> Edit(int id, [Bind("PaymentId,PaymentDate,EnrollmentsId,FeesId,PayeeId")] Payment payment)
         {
             if (id != payment.PaymentId)
             {
@@ -113,6 +126,9 @@ namespace SMS.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["EnrollmentsId"] = new SelectList(_context.Enrollments, "EnrollmentId", "EnrollmentId", payment.EnrollmentsId);
+            ViewData["FeesId"] = new SelectList(_context.Fees, "FeeId", "FeeId", payment.FeesId);
+            ViewData["PayeeId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", payment.PayeeId);
             return View(payment);
         }
 
@@ -125,6 +141,9 @@ namespace SMS.Controllers
             }
 
             var payment = await _context.Payments
+                .Include(p => p.Enrollments)
+                .Include(p => p.Fees)
+                .Include(p => p.Payee)
                 .FirstOrDefaultAsync(m => m.PaymentId == id);
             if (payment == null)
             {

@@ -19,6 +19,21 @@
                 <span asp-validation-for="PaymentDate" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="EnrollmentsId" class="control-label"></label>
+                <select asp-for="EnrollmentsId" class="form-control" asp-items="ViewBag.EnrollmentsId"></select>
+                <span asp-validation-for="EnrollmentsId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FeesId" class="control-label"></label>
+                <select asp-for="FeesId" class="form-control" asp-items="ViewBag.FeesId"></select>
+                <span asp-validation-for="FeesId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PayeeId" class="control-label"></label>
+                <select asp-for="PayeeId" class="form-control" asp-items="ViewBag.PayeeId"></select>
+                <span asp-validation-for="PayeeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>

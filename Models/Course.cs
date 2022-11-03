@@ -23,6 +23,8 @@ namespace SMS.Models
         [DisplayName("Offered")]
         public bool IsOffered { get; set; }
 
-        public virtual ICollection<Enrollment>? Enrollments { get; set; }
+        public Fees? Fees { get; set; }
+
+        public ICollection<Enrollment>? Enrollments { get; set; }
     }
 }

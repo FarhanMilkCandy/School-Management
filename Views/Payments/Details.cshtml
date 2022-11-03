@@ -16,6 +16,24 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.PaymentDate)
         </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Enrollments)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Enrollments.EnrollmentId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Fees)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Fees.FeeId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Payee)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Payee.Id)
+        </dd>
     </dl>
 </div>
 <div>

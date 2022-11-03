@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,22 +12,18 @@ namespace SMS.Controllers
 {
     public class EnrollmentsController : Controller
     {
-        private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
 
-        public EnrollmentsController(ApplicationDbContext context, RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
+        public EnrollmentsController(ApplicationDbContext context)
         {
             _context = context;
-            _userManager = userManager;
-            _roleManager = roleManager;
         }
 
         // GET: Enrollments
         public async Task<IActionResult> Index()
         {
-            var enrollments = _context.Enrollments.Include(e => e.Course).Include(e => e.ApplicationUser);
-            return View(await _context.Enrollments.ToListAsync());
+            var applicationDbContext = _context.Enrollments.Include(e => e.Courses).Include(e => e.Student);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Enrollments/Details/5
@@ -40,6 +35,8 @@ namespace SMS.Controllers
             }
 
             var enrollment = await _context.Enrollments
+                .Include(e => e.Courses)
+                .Include(e => e.Student)
                 .FirstOrDefaultAsync(m => m.EnrollmentId == id);
             if (enrollment == null)
             {
@@ -52,15 +49,9 @@ namespace SMS.Controllers
         // GET: Enrollments/Create
         public IActionResult Create()
         {
-            ViewBag.CourseId = new SelectList(_context.Courses.ToList(), "CourseId", "CourseName");
-            var studentList = _context.ApplicationUsers.ToList().Where(w => GetUserRoles(w).Result.ToList().Contains(Enums.Roles.Student.ToString())).ToList();
-            ViewBag.UserId = new SelectList(studentList, "Id", "UserName");
+            ViewData["CoursesId"] = new SelectList(_context.Courses, "CourseId", "CourseName");
+            ViewData["StudentId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
             return View();
-        }
-
-        private async Task<IEnumerable<string>> GetUserRoles(ApplicationUser user)
-        {
-            return new List<string>(await _userManager.GetRolesAsync(user));
         }
 
         // POST: Enrollments/Create
@@ -68,7 +59,7 @@ namespace SMS.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EnrollmentId,EnrollmentName,Grade")] Enrollment enrollment)
+        public async Task<IActionResult> Create([Bind("EnrollmentId,EnrollmentDate,CoursesId,StudentId,Grade")] Enrollment enrollment)
         {
             if (ModelState.IsValid)
             {
@@ -76,6 +67,8 @@ namespace SMS.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CoursesId"] = new SelectList(_context.Courses, "CourseId", "CourseName", enrollment.CoursesId);
+            ViewData["StudentId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", enrollment.StudentId);
             return View(enrollment);
         }
 
@@ -92,6 +85,8 @@ namespace SMS.Controllers
             {
                 return NotFound();
             }
+            ViewData["CoursesId"] = new SelectList(_context.Courses, "CourseId", "CourseName", enrollment.CoursesId);
+            ViewData["StudentId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", enrollment.StudentId);
             return View(enrollment);
         }
 
@@ -100,7 +95,7 @@ namespace SMS.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EnrollmentId,EnrollmentName,Grade")] Enrollment enrollment)
+        public async Task<IActionResult> Edit(int id, [Bind("EnrollmentId,EnrollmentDate,CoursesId,StudentId,Grade")] Enrollment enrollment)
         {
             if (id != enrollment.EnrollmentId)
             {
@@ -127,6 +122,8 @@ namespace SMS.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CoursesId"] = new SelectList(_context.Courses, "CourseId", "CourseName", enrollment.CoursesId);
+            ViewData["StudentId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", enrollment.StudentId);
             return View(enrollment);
         }
 
@@ -139,6 +136,8 @@ namespace SMS.Controllers
             }
 
             var enrollment = await _context.Enrollments
+                .Include(e => e.Courses)
+                .Include(e => e.Student)
                 .FirstOrDefaultAsync(m => m.EnrollmentId == id);
             if (enrollment == null)
             {
