@@ -1,53 +1,72 @@
 ﻿@model IEnumerable<SMS.Models.Course>
 
-@{
-    ViewData["Title"] = "Index";
+
+@if (User.IsInRole("Admin"))
+{
+    <p class="my-3">
+        <a class="btn btn-success" asp-action="Create">Add a new Course</a>
+    </p>
+}
+else
+{
+    ViewData["Title"] = "Courses";
+
+    <h1 class="text-success my-3">My Courses</h1>
+}
+@if (User.IsInRole("Admin"))
+{
+    using (Html.BeginForm("Index", "Courses", FormMethod.Get))
+    {
+        <div class="row">
+            <div class="col-md-4">
+                <p>
+                    Find by CourseName: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @class="form-control"})
+                </p>
+            </div>
+                <div class="col-md-3">
+                    <input class="btn btn-primary mt-4" type="submit" value="Search" />
+                </div>
+        </div>
+    }
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.CourseName)
+                Course Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CourseType)
+                Course Type
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CourseDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsOffered)
+                Description
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CourseName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CourseType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CourseDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsOffered)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CourseId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CourseId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CourseId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseDescription)
+                </td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <td>
+                        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.CourseId">Edit</a>
+                        <a class="btn btn-secondary mx-1" asp-action="Details" asp-route-id="@item.CourseId">Details</a>
+                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.CourseId">Delete</a>
+                    </td>
+                }
+            </tr>
+        }
     </tbody>
 </table>

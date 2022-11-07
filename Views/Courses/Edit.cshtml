@@ -1,4 +1,5 @@
-﻿@model SMS.Models.Course
+﻿@using SMS.Enums
+@model SMS.Models.Course
 
 @{
     ViewData["Title"] = "Edit";
@@ -20,12 +21,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="CourseType" class="control-label"></label>
-                <input asp-for="CourseType" class="form-control" />
+                <select asp-for="CourseType" class="form-control" asp-items="@Html.GetEnumSelectList<CourseTypes>()"></select>
                 <span asp-validation-for="CourseType" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CourseDescription" class="control-label"></label>
-                <input asp-for="CourseDescription" class="form-control" />
+                <textarea asp-for="CourseDescription" class="form-control"></textarea>
                 <span asp-validation-for="CourseDescription" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
@@ -41,7 +42,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-secondary my-2" asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

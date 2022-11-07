@@ -1,42 +1,41 @@
 ﻿@model SMS.Models.Fees
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Fee";
 }
 
-<h1>Edit</h1>
+<h1>Edit Fee</h1>
 
-<h4>Fees</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="FeeId" />
-            <div class="form-group">
+            <div class="form-group mt-2">
                 <label asp-for="FeeAmount" class="control-label"></label>
                 <input asp-for="FeeAmount" class="form-control" />
                 <span asp-validation-for="FeeAmount" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mt-2">
                 <label asp-for="FeeDescription" class="control-label"></label>
                 <input asp-for="FeeDescription" class="form-control" />
                 <span asp-validation-for="FeeDescription" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mt-2">
                 <label asp-for="CoursesId" class="control-label"></label>
-                <select asp-for="CoursesId" class="form-control" asp-items="ViewBag.CoursesId"></select>
+                <select asp-for="CoursesId" class="form-control" asp-items="ViewBag.CourseId"></select>
                 <span asp-validation-for="CoursesId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="form-group mt-2">
+                <input type="submit" value="Save" class="btn btn-success" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-secondary mt-2" asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

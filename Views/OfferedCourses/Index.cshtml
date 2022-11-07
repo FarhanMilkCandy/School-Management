@@ -1,0 +1,36 @@
+﻿<div class="container">
+    <div class="row">
+        @if (User.IsInRole("Admin"))
+        {
+            <a class="btn btn-success my-5" asp-area="" asp-controller="Courses" asp-action="Index">All Course List</a>
+        }
+        @foreach (var item in ViewBag.OfferdCourses)
+        {
+            <div class="col-md-4 my-1">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>@item.CourseName</h2>
+                        <p class="text-muted">@item.CourseType</p>
+                    </div>
+                    <div class="card-body">
+                        <p>@item.CourseDescription</p>
+                        <span class="btn btn-outline-success disabled">@item.CourseFee BDT</span>
+                    </div>
+                    @if (User.IsInRole("Student"))
+                    {
+                        <div class="card-footer">
+                            @if (item.IsEnrolled)
+                            {
+                                <a class="btn btn-success" asp-controller="Enrollments" asp-action="Index">Allready Enrolled</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-success" asp-controller="Enrollments" asp-action="Index">Get Enrolled</a>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>

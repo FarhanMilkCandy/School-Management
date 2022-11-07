@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using SMS.Enums;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace SMS.Models
@@ -15,7 +16,7 @@ namespace SMS.Models
 
         [Required]
         [DisplayName("Course Type")]
-        public string CourseType { get; set; }
+        public CourseTypes CourseType { get; set; }
 
         [DisplayName("Description")]
         public string? CourseDescription { get; set; }

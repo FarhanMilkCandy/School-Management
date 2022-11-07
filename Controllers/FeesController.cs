@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SMS.Data;
+using SMS.Enums;
 using SMS.Models;
 
 namespace SMS.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class FeesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -19,7 +22,7 @@ namespace SMS.Controllers
         {
             _context = context;
         }
-
+        [Authorize(Roles = "Admin")]
         // GET: Fees
         public async Task<IActionResult> Index()
         {
@@ -27,6 +30,7 @@ namespace SMS.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Fees/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -46,10 +50,13 @@ namespace SMS.Controllers
             return View(fees);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Fees/Create
         public IActionResult Create()
         {
-            ViewData["CoursesId"] = new SelectList(_context.Courses, "CourseId", "CourseName");
+            var fees = _context.Fees.Select(s=> s.CoursesId).ToList();
+            var coursesWithoutFee = _context.Courses.Where(w => !fees.Contains(w.CourseId)).ToList();
+            ViewBag.CourseId = new SelectList(coursesWithoutFee, "CourseId", "CourseName");
             return View();
         }
 
@@ -60,27 +67,24 @@ namespace SMS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("FeeId,FeeAmount,FeeDescription,CoursesId")] Fees fees)
         {
-            //ModelState.SetModelValue( this.ModelState.Keys.Where(w=> w.ToString().Equals("Courses")).FirstOrDefault(), _context.Courses.Where(w => w.CourseId == fees.CoursesId).FirstOrDefault() ?? new Course(), "");
-            var errors = ModelState.Keys
-                   .Where(k => ModelState[k].Errors.Count > 0)
-                   .Select(k => new
-                   {
-                       propertyName = k,
-                       errorMessage = ModelState[k].Errors[0].ErrorMessage
-                   }).ToList();
+            var feesList = _context.Fees.Select(s => s.CoursesId).ToList();
+            var coursesWithoutFee = _context.Courses.Where(w => !feesList.Contains(w.CourseId)).ToList();
             if (ModelState.IsValid)
             {
                 _context.Add(fees);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CoursesId"] = new SelectList(_context.Courses, "CourseId", "CourseName", fees.CoursesId);
+            ViewBag.CourseId = new SelectList(coursesWithoutFee, "CourseId", "CourseName", fees.CoursesId);
             return View(fees);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Fees/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var fee = _context.Fees.Select(s => s.CoursesId).ToList();
+            var coursesWithoutFee = _context.Courses.Where(w => !fee.Contains(w.CourseId)).ToList();
             if (id == null || _context.Fees == null)
             {
                 return NotFound();
@@ -91,7 +95,7 @@ namespace SMS.Controllers
             {
                 return NotFound();
             }
-            ViewData["CoursesId"] = new SelectList(_context.Courses, "CourseId", "CourseName", fees.CoursesId);
+            ViewBag.CourseId = new SelectList(coursesWithoutFee, "CourseId", "CourseName", fees.CoursesId);
             return View(fees);
         }
 
@@ -102,6 +106,8 @@ namespace SMS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("FeeId,FeeAmount,FeeDescription,CoursesId")] Fees fees)
         {
+            var fee = _context.Fees.Select(s => s.CoursesId).ToList();
+            var coursesWithoutFee = _context.Courses.Where(w => !fee.Contains(w.CourseId)).ToList();
             if (id != fees.FeeId)
             {
                 return NotFound();
@@ -127,10 +133,11 @@ namespace SMS.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CoursesId"] = new SelectList(_context.Courses, "CourseId", "CourseName", fees.CoursesId);
+            ViewBag.CourseId = new SelectList(coursesWithoutFee, "CourseId", "CourseName", fees.CoursesId);
             return View(fees);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Fees/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

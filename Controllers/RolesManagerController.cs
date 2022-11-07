@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace SMS.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class RolesManagerController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;
