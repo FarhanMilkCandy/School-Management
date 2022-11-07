@@ -781,16 +781,11 @@ section {
         margin: 0;
     }
 
-    .courses .course-content .price {
-        margin: 0;
-        font-weight: 700;
-        font-size: 18px;
-        color: #37423b;
-    }
-
 .courses .trainer {
     padding-top: 15px;
     border-top: 1px solid #eef0ef;
+    max-height: 40px;
+    bottom: 10px;
 }
 
     .courses .trainer .trainer-profile img {
@@ -803,6 +798,7 @@ section {
         font-weight: 600;
         font-size: 16px;
         color: #5a6c60;
+        background: #8da34b !important;
     }
 
     .courses .trainer .trainer-rank {

@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -18,8 +18,9 @@
             <p>Popular Courses</p>
         </div>
         <div class="row" data-aos="zoom-in" data-aos-delay="100">
-            @foreach (var item in ViewBag.courses)
-            {
+
+                @foreach (var item in ViewBag.courses)
+                {
                 <div class="col-lg-4 col-md-6 d-flex align-items-stretch my-3">
                     <div class="course-item" style="width :100%">
                         <div class="course-content">
