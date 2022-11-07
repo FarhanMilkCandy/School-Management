@@ -20,7 +20,7 @@ namespace SMS.Controllers
             _signInManager = signInManager;
         }
 
-        //[Authorize(Roles = "Student")]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> Index()
         {
             var studentResult = await _context.Enrollments.Where(e => e.StudentId == _userManager.GetUserId(User)).Join

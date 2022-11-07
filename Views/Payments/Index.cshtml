@@ -1,53 +1,45 @@
 ﻿@model IEnumerable<SMS.Models.Payment>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "My Payments";
 }
 
-<h1>Index</h1>
+<h1>Payment Records</h1>
+@if (User.IsInRole("Student"))
+{
+    <p>
+        <a class="btn btn-success" asp-action="Create">Make Payments</a>
+    </p>
+}
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.PaymentDate)
+                Course Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Enrollments)
+                Fee Paid
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Fees)
+                Payment Date
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Payee)
-            </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.PaymentDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Enrollments.EnrollmentId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Fees.FeeId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Payee.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.PaymentId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.PaymentId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.PaymentId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in ViewBag.Payments)
+        {
+            <tr>
+                <td>
+                    @item.CourseName
+                </td>
+                <td>
+                    @item.FeeAmount
+                </td>
+                <td>
+                    @item.PaymentDate
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

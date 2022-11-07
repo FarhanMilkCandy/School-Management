@@ -14,11 +14,12 @@
                 <li class="nav-item">
                     <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                 </li>
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="Index">Courses</a>
+                <a class="nav-link text-dark" asp-area="" asp-controller="OfferedCourses" asp-action="Index">Offered Courses</a>
                 @if (!SignInManager.IsSignedIn(User))
                 {
-                    <li><a class="nav-link text-dark" href="about.html">About</a></li>
-                    <li><a class="nav-link text-dark" href="contact.html">Contact</a></li>
+
+                    <li><a class="nav-link text-dark" href="#">About</a></li>
+                    <li><a class="nav-link text-dark" href="#">Contact</a></li>
                 }
                 else
                 {
@@ -32,12 +33,17 @@
                                 <li><a class="nav-link text-dark" asp-area="" asp-controller="UserRoles" asp-action="Index">Manage User Roles</a></li>
                             </ul>
                         </li>
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Enrollments" asp-action="Index">Enrollments</a>
                         <a class="nav-link text-dark" asp-area="" asp-controller="Fees" asp-action="Index">Fees</a>
                     }
+                    else if (User.IsInRole("Student"))
+                    {
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="Index">My Courses</a>
+                    }
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Enrollments" asp-action="Index">Enrollments</a>
                     <a class="nav-link text-dark" asp-area="" asp-controller="Payments" asp-action="Index">Payments</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Results" asp-action="Index">Results</a>
                 }
-                    <partial name="_LoginPartial" />
+                <partial name="_LoginPartial" />
             </ul>
 
             <i class="bi bi-list mobile-nav-toggle"></i>

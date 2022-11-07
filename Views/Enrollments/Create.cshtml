@@ -1,46 +1,63 @@
 ﻿@model SMS.Models.Enrollment
-
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Enrollments";
 }
 
-<h1>Create</h1>
+<h1>Enroll</h1>
 
-<h4>Enrollment</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="EnrollmentDate" class="control-label"></label>
-                <input asp-for="EnrollmentDate" class="form-control" />
-                <span asp-validation-for="EnrollmentDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CoursesId" class="control-label"></label>
-                <select asp-for="CoursesId" class ="form-control" asp-items="ViewBag.CoursesId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="StudentId" class="control-label"></label>
-                <select asp-for="StudentId" class ="form-control" asp-items="ViewBag.StudentId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Grade" class="control-label"></label>
-                <input asp-for="Grade" class="form-control" />
-                <span asp-validation-for="Grade" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>⛔ @TempData["ErrorMessage"]</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-</div>
+}
+<form asp-action="Create">
+    <div class="row">
+        <div class="col-md-6 my-3">
+            <div class="form-group">
+                <label asp-for="CoursesId" class="control-label">Course</label>
+                <select asp-for="CoursesId" class="dropdown form-control" asp-items="ViewBag.CoursesId"></select>
+            </div>
+        </div>
+        @if (User.IsInRole("Admin"))
+        {
+            <div class="col-md-6 my-3">
+                <div class="form-group">
+                    <label asp-for="StudentId" class="control-label">Student Mail</label>
+                    <select asp-for="StudentId" class="form-control" asp-items="ViewBag.StudentId"></select>
+                </div>
+            </div>
+            <div class="col-md-6 my-3">
+                <div class="form-group">
+                    <input type="hidden" asp-for="Grade" class="form-control" />
+                </div>
+            </div>
+        }
+        else if (User.IsInRole("Student"))
+        {
+            <input hidden asp-for="StudentId" class="form-control" value="@UserManager.GetUserId(User)" />
+        }
+        <input hidden asp-for="EnrollmentDate" class="form-control" type="date" value="@DateOnly.Parse(DateTime.Now.ToShortDateString())" />
+        <div class="row">
+            <div class="form-group">
+                <input type="submit" value="Enroll" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+</form>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-secondary mt-2" asp-action="Index">Back to List</a>
 </div>
 
+
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

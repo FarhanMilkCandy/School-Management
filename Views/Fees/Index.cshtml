@@ -1,19 +1,20 @@
 ﻿@model IEnumerable<SMS.Models.Fees>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Fees";
 }
 
-<h1>Index</h1>
+<h1>All Fees</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-success" asp-action="Create">Create New Fee</a>
 </p>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FeeAmount)
+                @Html.DisplayNameFor(model => model.FeeAmount) (BDT)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FeeDescription)
@@ -37,9 +38,9 @@
                 @Html.DisplayFor(modelItem => item.Courses.CourseName)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.FeeId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.FeeId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.FeeId">Delete</a>
+                <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.FeeId">Edit</a> 
+                <a class="btn btn-secondary mx-2"  asp-action="Details" asp-route-id="@item.FeeId">Details</a> 
+                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.FeeId">Delete</a>
             </td>
         </tr>
 }

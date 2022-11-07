@@ -1,53 +1,92 @@
 ﻿@model IEnumerable<SMS.Models.Enrollment>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Enroll";
 }
 
-<h1>Index</h1>
+<h1>Course Enrollments</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+
+    @if (User.IsInRole("Admin"))
+    {
+        <p>
+            <a class="btn btn-success" asp-action="Create">Enroll a student</a>
+        </p>
+    }
+else if (User.IsInRole("Student"))
+    {
+        <p>
+            <a class="btn btn-success" asp-action="Create">Get Enrolled</a>
+        </p>
+    }
+
+    @if (Model.Any())
+{
+    <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.EnrollmentDate)
+                Student Name
+            </th>
+            <th>
+                Course
+            </th>
+            <th>
+                Date of Enroll
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Grade)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Student)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Courses)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.EnrollmentDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Grade)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Student.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Courses.CourseName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.EnrollmentId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.EnrollmentId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.EnrollmentId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @(item.Student.FirstName + " " + item.Student.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Courses.CourseName)
+                </td>
+                <td>
+                    @item.EnrollmentDate.ToString("MMMM dd, yyyy")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Grade)
+                </td>
+                <td>
+                        @if (User.IsInRole("Admin"))
+                        {
+
+                            <a class="btn btn-warning"  asp-action="Edit" asp-route-id="@item.EnrollmentId">Edit</a>
+                            
+                            <a class="btn btn-secondary mx-1" asp-action="Details" asp-route-id="@item.EnrollmentId">Details</a>
+                            
+                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.EnrollmentId">Delete</a>
+                        }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+}
+else
+{
+    @if (User.IsInRole("Admin"))
+    {
+        <p>
+            No Enrollments.
+        </p>
+    }
+    else if (User.IsInRole("Student"))
+    {
+        <p>
+            You are not enrolled in any course right now.
+        </p>
+    }
+}

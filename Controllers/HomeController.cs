@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using SMS.Data;
 using SMS.Models;
 using System.Diagnostics;
@@ -19,6 +19,7 @@ namespace SMS.Controllers
         public IActionResult Index()
         {
             var course = _context.Courses.ToList().Take(6);
+
             ViewBag.courses = course;
 
             return View();

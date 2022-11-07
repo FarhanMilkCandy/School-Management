@@ -1,43 +1,37 @@
 ﻿@model SMS.Models.Payment
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Make Payment";
 }
 
-<h1>Create</h1>
-
-<h4>Payment</h4>
+<h1>Make Payment</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+            <div class="form-group mt-2">
                 <label asp-for="PaymentDate" class="control-label"></label>
-                <input asp-for="PaymentDate" class="form-control" />
+                <input disabled asp-for="PaymentDate" class="form-control" value="@ViewBag.TodayDate" />
                 <span asp-validation-for="PaymentDate" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="EnrollmentsId" class="control-label"></label>
+            <div class="form-group mt-2">
+                <label asp-for="EnrollmentsId" class="control-label">Enrolled Courses</label>
                 <select asp-for="EnrollmentsId" class ="form-control" asp-items="ViewBag.EnrollmentsId"></select>
             </div>
-            <div class="form-group">
-                <label asp-for="FeesId" class="control-label"></label>
-                <select asp-for="FeesId" class ="form-control" asp-items="ViewBag.FeesId"></select>
+            <div class="form-group my-2">
+                <label class="control-label">Payee: <span class="text-muted">@ViewBag.PayeeName</span></label>
+                <input type="hidden" asp-for="PayeeId" value="@ViewBag.PayeeId" />
             </div>
-            <div class="form-group">
-                <label asp-for="PayeeId" class="control-label"></label>
-                <select asp-for="PayeeId" class ="form-control" asp-items="ViewBag.PayeeId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="form-group mt-2">
+                <input type="submit" value="Pay" class="btn btn-success" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-secondary mt-2" asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

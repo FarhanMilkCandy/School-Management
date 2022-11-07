@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -6,8 +6,8 @@
 <section id="hero" class="d-flex justify-content-center align-items-center">
     <div class="container position-relative" data-aos="zoom-in" data-aos-delay="100">
         <h1>Learning Today,<br>Leading Tomorrow</h1>
-        <h2>We are team of talented designers making websites with Bootstrap</h2>
-        <a href="courses.html" class="btn-get-started">Get Started</a>
+        <h2>There is no better way to achieve success than Education</h2>
+        <a class="btn-get-started" asp-area="" asp-controller="OfferedCourses" asp-action="Index">Get Started</a>
     </div>
 </section><!-- End Hero -->
 <!-- ======= Popular Courses Section ======= -->
@@ -18,6 +18,7 @@
             <p>Popular Courses</p>
         </div>
         <div class="row" data-aos="zoom-in" data-aos-delay="100">
+
                 @foreach (var item in ViewBag.courses)
                 {
                 <div class="col-lg-4 col-md-6 d-flex align-items-stretch my-3">
@@ -30,35 +31,15 @@
                             <p>@item.CourseDescription</p>
                             <div class="trainer d-flex justify-content-between align-items-center">
                                 <div class="trainer-profile d-flex align-items-center">
-                                    <a class="btn btn-secondary" asp-area="" asp-controller="Enrollments" asp-action="Create">Enrollments</a>
+                                    <a class="btn btn-success" asp-area="" asp-controller="Enrollment" asp-action="Create">Enrollments</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                }
-            <!-- End Course Item-->   
+            }
+            <!-- End Course Item-->
         </div>
     </div>
 </section>
 <!-- End Popular Courses Section -->
-
-@*<div class="d-flex justify-content-between align-items-center mb-3">
-                            <h4>Web Development</h4>
-                            <p class="price">$169</p>
-                        </div>*@
-
-                        @*<h3><a href="course-details.html">Website Design</a></h3>
-                        <p>Et architecto provident deleniti facere repellat nobis iste. Id facere quia quae dolores dolorem tempore.</p>
-                        <div class="trainer d-flex justify-content-between align-items-center">
-                            <div class="trainer-profile d-flex align-items-center">
-                                <form action="" method="post">
-                                    <a href="default.asp" target="_blank">Enrollment</a>
-                                </form>
-                            </div>
-                            <div class="trainer-rank d-flex align-items-center">
-                                <i class="bx bx-user"></i>&nbsp;50
-                                &nbsp;&nbsp;
-                                <i class="bx bx-heart"></i>&nbsp;65
-                            </div>
-                        </div>*@

@@ -8,7 +8,7 @@
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
-body {
+/*body {
   font-family: "Open Sans", sans-serif;
   color: #444444;
 }
@@ -30,12 +30,12 @@ h4,
 h5,
 h6 {
   font-family: "Raleway", sans-serif;
-}
+}*/
 
 /*--------------------------------------------------------------
 # Back to top button
 --------------------------------------------------------------*/
-.back-to-top {
+/*.back-to-top {
   position: fixed;
   visibility: hidden;
   opacity: 0;
@@ -63,12 +63,12 @@ h6 {
 .back-to-top.active {
   visibility: visible;
   opacity: 1;
-}
+}*/
 
 /*--------------------------------------------------------------
 # Preloader
 --------------------------------------------------------------*/
-#preloader {
+/*#preloader {
   position: fixed;
   top: 0;
   left: 0;
@@ -112,21 +112,21 @@ h6 {
   100% {
     transform: rotate(360deg);
   }
-}
+}*/
 
 /*--------------------------------------------------------------
 # Disable aos animation delay on mobile devices
 --------------------------------------------------------------*/
-@media screen and (max-width: 768px) {
+/*@media screen and (max-width: 768px) {
   [data-aos-delay] {
     transition-delay: 0 !important;
   }
-}
+}*/
 
 /*--------------------------------------------------------------
 # Header
 --------------------------------------------------------------*/
-#header {
+/*#header {
   background: #fff;
   transition: all 0.5s;
   z-index: 997;
@@ -151,12 +151,12 @@ h6 {
 
 #header .logo img {
   max-height: 40px;
-}
+}*/
 
 /**
 * Get Startet Button 
 */
-.get-started-btn {
+/*.get-started-btn {
   margin-left: 22px;
   background: #5fcf80;
   color: #fff;
@@ -178,7 +178,7 @@ h6 {
     margin: 0 15px 0 0;
     padding: 6px 18px;
   }
-}
+}*/
 
 /*--------------------------------------------------------------
 # Navigation Menu
@@ -186,7 +186,7 @@ h6 {
 /**
 * Desktop Navigation 
 */
-.navbar {
+/*.navbar {
   padding: 0;
 }
 
@@ -294,12 +294,12 @@ h6 {
   .navbar .dropdown .dropdown:hover>ul {
     left: -100%;
   }
-}
+}*/
 
 /**
 * Mobile Navigation 
 */
-.mobile-nav-toggle {
+/*.mobile-nav-toggle {
   color: #37423b;
   font-size: 28px;
   cursor: pointer;
@@ -404,17 +404,17 @@ h6 {
 
 .navbar-mobile .dropdown>.dropdown-active {
   display: block;
-}
+}*/
 
 /*--------------------------------------------------------------
 # Hero Section
 --------------------------------------------------------------*/
-#hero {
+/*#hero {
     width: 100%;
     height: 80vh;
-    background: url('../img/hero-bg.jpg') top center;
+    background: url('../img/hero-bg.jpg') top center;*/
     /*background: url("../img/hero-bg.jpg") top center;*/
-    background-size: cover;
+    /*background-size: cover;
     position: relative;
 }
 
@@ -492,12 +492,12 @@ h6 {
     font-size: 18px;
     line-height: 24px;
   }
-}
+}*/
 
 /*--------------------------------------------------------------
 # Sections General
 --------------------------------------------------------------*/
-section {
+/*section {
   padding: 60px 0;
   overflow: hidden;
 }
@@ -563,12 +563,12 @@ section {
 .breadcrumbs p {
   font-size: 14px;
   margin-bottom: 0;
-}
+}*/
 
 /*--------------------------------------------------------------
 # About
 --------------------------------------------------------------*/
-.about .content h3 {
+/*.about .content h3 {
   font-weight: 600;
   font-size: 26px;
 }
@@ -609,12 +609,12 @@ section {
     margin: 0 48px 0 0;
     padding: 6px 18px;
   }
-}
+}*/
 
 /*--------------------------------------------------------------
 # Counts
 --------------------------------------------------------------*/
-.counts {
+/*.counts {
   padding: 30px 0;
 }
 
@@ -632,12 +632,12 @@ section {
   font-size: 15px;
   font-weight: 600;
   color: #37423b;
-}
+}*/
 
 /*--------------------------------------------------------------
 # Why Us
 --------------------------------------------------------------*/
-.why-us .content {
+/*.why-us .content {
   padding: 30px;
   background: #5fcf80;
   border-radius: 4px;
@@ -698,12 +698,12 @@ section {
 .why-us .icon-boxes .icon-box p {
   font-size: 15px;
   color: #848484;
-}
+}*/
 
 /*--------------------------------------------------------------
 # Features
 --------------------------------------------------------------*/
-.features {
+/*.features {
   padding-top: 0px;
 }
 
@@ -740,12 +740,12 @@ section {
 
 .features .icon-box:hover h3 a {
   color: #5fcf80;
-}
+}*/
 
 /*--------------------------------------------------------------
 # Courses
 --------------------------------------------------------------*/
-.courses .course-item {
+/*.courses .course-item {
   border-radius: 5px;
   border: 1px solid #eef0ef;
 }
@@ -808,12 +808,12 @@ section {
 .courses .trainer .trainer-rank {
   font-size: 18px;
   color: #657a6d;
-}
+}*/
 
 /*--------------------------------------------------------------
 # Trainers
 --------------------------------------------------------------*/
-.trainers .member {
+/*.trainers .member {
   text-align: center;
   margin-bottom: 20px;
   background: #fff;
@@ -863,12 +863,12 @@ section {
 .trainers .member .social i {
   font-size: 18px;
   margin: 0 2px;
-}
+}*/
 
 /*--------------------------------------------------------------
 # Testimonials
 --------------------------------------------------------------*/
-.testimonials .testimonial-wrap {
+/*.testimonials .testimonial-wrap {
   padding-left: 50px;
 }
 
@@ -968,12 +968,12 @@ section {
     position: static;
     left: auto;
   }
-}
+}*/
 
 /*--------------------------------------------------------------
 # Cource Details
 --------------------------------------------------------------*/
-.course-details h3 {
+/*.course-details h3 {
   font-size: 24px;
   margin: 30px 0 15px 0;
   font-weight: 700;
@@ -1023,12 +1023,12 @@ section {
 
 .course-details .course-info a {
   color: #657a6d;
-}
+}*/
 
 /*--------------------------------------------------------------
 # Cource Details Tabs
 --------------------------------------------------------------*/
-.cource-details-tabs {
+/*.cource-details-tabs {
   overflow: hidden;
   padding-top: 0;
 }
@@ -1087,12 +1087,12 @@ section {
     color: #fff;
     background: #5fcf80;
   }
-}
+}*/
 
 /*--------------------------------------------------------------
 # Events
 --------------------------------------------------------------*/
-.events .card {
+/*.events .card {
   border: 0;
   padding: 0 30px;
   margin-bottom: 60px;
@@ -1159,12 +1159,12 @@ section {
 
 .events .card:hover .card-body .card-title a {
   color: #5fcf80;
-}
+}*/
 
 /*--------------------------------------------------------------
 # Pricing
 --------------------------------------------------------------*/
-.pricing .box {
+/*.pricing .box {
   padding: 20px;
   background: #fff;
   text-align: center;
@@ -1269,12 +1269,12 @@ section {
   padding: 1px 0 3px 0;
   background: #5fcf80;
   color: #fff;
-}
+}*/
 
 /*--------------------------------------------------------------
 # Contact
 --------------------------------------------------------------*/
-.contact {
+/*.contact {
   padding-top: 5px;
 }
 
@@ -1426,12 +1426,12 @@ section {
   100% {
     transform: rotate(360deg);
   }
-}
+}*/
 
 /*--------------------------------------------------------------
 # Footer
 --------------------------------------------------------------*/
-#footer {
+/*#footer {
   color: #37423b;
   font-size: 14px;
   background: #eef0ef;
@@ -1590,4 +1590,4 @@ section {
   background: #3ac162;
   color: #fff;
   text-decoration: none;
-}
+}*/
